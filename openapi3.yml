@@ -1,0 +1,1178 @@
+openapi: 3.0.2
+info:
+  title: 'FiberCli - Adamo Hybrid ACS API'
+  version: '1.0'
+paths:
+  /api/api-token-auth/:
+    post:
+      operationId: createAuthToken
+      description: 'Genera u obtiene el token para el usuario de la API.'
+      parameters: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: 'Nombre de Usuario de la API.'
+                password:
+                  type: string
+                  description: 'Contraseña del usuario de la API.'
+              required:
+                - username
+                - password
+          # application/json:
+          #   schema:
+          #     $ref: '#/components/schemas/AuthToken'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    token: 
+                      type: string
+          description: 'Credenciales de acceso a la API.'
+      tags:
+      - Obtención de Token de Autenticación
+  /api/organizations:
+    get:
+      security:
+        -  ApiKeyAuth: []
+      operationId: getOrganizations
+      description: "Obtiene informaci\xF3n de todas las organizaciones asignadas al usuario de la API. \nNormalmente sólo habrá una organización por usuario.\n\n Permisos\n-----------------\n\
+        - organization.view_organization\n\nDevuelve\n-------\n- Json Response"
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    detail: 
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          organization_id:
+                            type: integer
+                          phone:
+                            type: string
+                          email:
+                            type: string
+                          dispatching_email:
+                            type: string
+                          service_vlan:
+                            type: integer
+                          tech_info:
+                            type: string
+                          default_data_vlan:
+                            type: integer
+                          default_bridge_vlan:
+                            type: integer
+                          default_voip_vlan:
+                            type: integer
+                          native_vlan:
+                            type: integer
+                          contact:
+                            type: string
+                          interconnection:
+                            type: string
+                          self_installer:
+                            type: boolean
+                          pulpo_name:
+                            type: string
+                          pulpo_id:
+                            type: string
+                          cif:
+                            type: string
+                          fiscal_name:
+                            type: string
+                          created:
+                            type: string
+                          delivery_address:
+                            type: string
+                          account_manager:
+                            type: string
+                          acs_ip:
+                            type: string
+                          ssid:
+                            type: string
+                          generic_device_pass:
+                            type: string
+                          voip_server:
+                            type: string
+                          created_at:
+                            type: string
+                          modified_at:
+                            type: string
+              example:
+                detail:
+                  -
+                    id: 1
+                    name: "Organizacion Ficticia (TEMP)"
+                    organization_id: 167
+                    phone: "123456444"
+                    email: "test@adamo.es"
+                    dispatching_email: "test@adamo.es"
+                    service_vlan: 4003
+                    tech_info: "Esto es una organizacion de prueba."
+                    default_data_vlan: 30
+                    default_bridge_vlan: 50
+                    default_voip_vlan: 40
+                    native_vlan: 20
+                    contact: "Organizacion de pruebas."
+                    interconnection: null
+                    self_installer: true
+                    pulpo_name: null
+                    pulpo_id: null
+                    cif: "C1234567890"
+                    fiscal_name: null
+                    created: "2021-05-18 13:25:56"
+                    delivery_address: null
+                    account_manager: "admin"
+                    acs_ip: "10.16.24.25"
+                    ssid: "GenericSSID"
+                    generic_device_pass: "genericPass"
+                    voip_server: "10.30.30.1:5095"
+                    created_at: "2021-06-29T10:17:05.604+02:00"
+                    modified_at: "2021-10-08T17:04:58.254+02:00"
+                
+                    
+          description: Devuelve información básica de la Organización.
+        '401':
+          description: Falta información relativa a la Autorización, o esta es inválida.
+        '500':
+          description: Error en el servidor.
+      tags:
+      - Organizaciones
+  /api/organizations/{org_id}:
+    get:
+      operationId: getOrganizationById
+      description: "Obtiene informaci\xF3n de una organización por su ID de Organizacion de Adamo.\n\n Permisos\n-----------------\n\
+        - organization.view_organization\n\nDevuelve\n-------\n- Json Response"
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        description: 'ID de la Organización.'
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail: 
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        organization_id:
+                          type: integer
+                        phone:
+                          type: string
+                        email:
+                          type: string
+                        dispatching_email:
+                          type: string
+                        service_vlan:
+                          type: integer
+                        tech_info:
+                          type: string
+                        default_data_vlan:
+                          type: integer
+                        default_bridge_vlan:
+                          type: integer
+                        default_voip_vlan:
+                          type: integer
+                        native_vlan:
+                          type: integer
+                        contact:
+                          type: string
+                        interconnection:
+                          type: string
+                        self_installer:
+                          type: boolean
+                        pulpo_name:
+                          type: string
+                        pulpo_id:
+                          type: string
+                        cif:
+                          type: string
+                        fiscal_name:
+                          type: string
+                        created:
+                          type: string
+                        delivery_address:
+                          type: string
+                        account_manager:
+                          type: string
+                        acs_ip:
+                          type: string
+                        ssid:
+                          type: string
+                        generic_device_pass:
+                          type: string
+                        voip_server:
+                          type: string
+                        created_at:
+                          type: string
+                        modified_at:
+                          type: string
+                        services:
+                          type: array
+                          items:
+                            type: integer
+                        contacts:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                              phone:
+                                type: string
+                              email:
+                                type: string
+                              role:
+                                type: string
+                              internal_id:
+                                type: string
+                              created_at:
+                                type: string
+                              modified_at:
+                                type: string
+              example:
+                  detail:
+                    -
+                      id: 1
+                      name: "Organizacion Ficticia (TEMP)"
+                      organization_id: 167
+                      phone: "123456444"
+                      email: "test@adamo.es"
+                      dispatching_email: "test@adamo.es"
+                      service_vlan: 4003
+                      tech_info: "Esto es una organizacion de prueba."
+                      default_data_vlan: 30
+                      default_bridge_vlan: 50
+                      default_voip_vlan: 40
+                      native_vlan: 20
+                      contact: "Organizacion de pruebas."
+                      interconnection: null
+                      self_installer: true
+                      pulpo_name: null
+                      pulpo_id: null
+                      cif: "C1234567890"
+                      fiscal_name: null
+                      created: "2021-05-18 13:25:56"
+                      delivery_address: null
+                      account_manager: "admin"
+                      acs_ip: "10.16.24.25"
+                      ssid: "GenericSSID"
+                      generic_device_pass: "genericPass"
+                      voip_server: "10.30.30.1:5095"
+                      created_at: "2021-06-29T10:17:05.604+02:00"
+                      modified_at: "2021-10-08T17:04:58.254+02:00"
+                      services:
+                        - 9
+                        - 72
+                      contacts:
+                        -
+                          name: "Contacto 1"
+                          phone: "654765456"
+                          email: "contact1@mail.com"
+                          role: "RESP. TECNICO 1"
+                          internal_id:
+                          created_at: "2021-09-01 15:46:40.511793"
+                          modified_at: "2021-09-01 15:46:40.511843"
+                        -
+                          name: "Contacto 2"
+                          phone: "654765458"
+                          email: "contact2@mail.com"
+                          role: "RESP. TECNICO 2"
+                          internal_id:
+                          created_at: "2021-09-01 15:46:40.542974"
+                          modified_at: "2021-09-01 15:46:40.543093"
+                        -
+                          name: "Contacto 3"
+                          phone: "654765459"
+                          email: "contact2@mail.com"
+                          role: "RESP. COMERCIAL, AT.CLIENTE FINAL, RES. LOGISTICA"
+                          internal_id:
+                          created_at: "2021-09-01 15:46:40.581237"
+                          modified_at: "2021-09-01 15:46:40.581296"
+                  
+          description: Devuelve información detallada de la Organización.
+        '401':
+          description: Falta información relativa a la Autorización, o esta es inválida.
+        '5XX':
+          description: Error en el servidor.
+      tags:
+      - Organizaciones
+    put:
+      operationId: putOrganization
+      description: "Edita la configuraci\xF3n de la organizaci\xF3n\nrelacionada con\
+        \ los datos de servidor ACS.\n\nPermisos\n-----------------\n- organization.edit_organization\n\
+        \nDevuelve\n-------\n- Json Response"
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        description: 'ID de la Organización.'
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                acs_ip:
+                  type: string
+                  pattern: '^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
+                  description: 'IPv4 del servidor ACS'
+                voip_vlan:
+                  type: integer
+                  description: 'Default VoIP vlan para uso interno del ACS. No utilizar sin consultar antes con NOC de Fibercli.'
+                data_vlan:
+                  type: integer
+                  description: 'Default Data vlan para uso interno del ACS. No utilizar sin consultar antes con NOC de Fibercli.'
+                bridge_vlan:
+                  type: integer
+                  description: 'Default Bridge vlan para uso interno del ACS. No utilizar sin consultar antes con NOC de Fibercli.'
+                wlan_prefix:
+                  type: string
+                  description: 'Prefijo WLAN para SSID genérico de la organización.'
+                cpe_secret:
+                  type: string
+                  description: 'Contraseña genérica de CPE para usuario admin.'
+                voip_server:
+                  type: string
+                  pattern: '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$'
+                  description: 'Servidor VoIP incluyendo la IP y el puerto, separados por un punto. Formato: "IPv4:Puerto".'
+            example:
+              acs_ip: "192.168.1.25"
+              voip_vlan: 40
+              data_vlan: 30
+              bridge_vlan: 50
+              wlan_prefix: "FiberCli"
+              cpe_secret: "c0ntr4s3ñ4"
+              voip_server: "10.30.30.1:5095"
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    detail: 
+                      type: string
+                example:
+                  -
+                    detail: "Ok"
+                  
+          description: 'Mensaje de que la operación se ha realizado sin errores.'
+        '400':
+          description: Petición mal formada.
+        '401':
+          description: Falta información relativa a la Autorización, o esta es inválida.
+        '5XX':
+          description: Error en el servidor.
+      tags:
+      - Organizaciones
+  /api/services:
+    get:
+      operationId: getServices
+      description: 'Obtiene listado de servicios asociados a la organizacion.
+
+        Se realiza el fetch si es posible, si no se devuelven los datos de BBDD.
+
+
+        Permisos
+
+        -----------------
+
+        - service.view_service
+
+
+        Devuelve
+
+        -------
+
+        - Json Response'
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    detail: 
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          service_id:
+                            type: integer
+                          upload:
+                            type: integer
+                          download:
+                            type: integer
+                          ont:
+                            type: integer
+                          voip:
+                            type: integer
+                          profile:
+                            type: integer
+                          type:
+                            type: string
+                          created:
+                            type: string
+              example:
+                detail:
+                  -
+                    name: "BS VPS Standard 1G/300M"
+                    service_id: 9
+                    upload: 300
+                    download: 1000
+                    ont: 2301
+                    voip: 0
+                    profile: 1
+                    type: "bitstream"
+                    created:
+                  -
+                    name: "BS VPS Standard 1G/1G"
+                    service_id: 72
+                    upload: 1000
+                    download: 1000
+                    ont:
+                    voip:
+                    profile: 5
+                    type: "bitstream"
+                    created: "2020-05-20 18:09:47"
+          description: 'Listado de servicios asociados a la organización a la que está asignada el usuario.'
+        '401':
+          description: Falta información relativa a la Autorización, o esta es inválida.
+        '5XX':
+          description: Error en el servidor.
+      tags:
+      - Servicios
+  /api/services/{serv_id}:
+    get:
+      operationId: getServiceById
+      description: 'Obtiene detalles de un servicio asociados a la organizacion por su ID de servicio de Adamo.
+
+        Se realiza el fetch si es posible, si no se devuelven los datos de BBDD.
+
+
+        Permisos
+
+        -----------------
+
+        - service.view_service
+
+
+        Devuelve
+
+        -------
+
+        - Json Response'
+      parameters:
+      - name: serv_id
+        in: path
+        required: true
+        description: 'ID del servicio.'
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    detail: 
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          service_id:
+                            type: integer
+                          upload:
+                            type: integer
+                          download:
+                            type: integer
+                          ont:
+                            type: integer
+                          voip:
+                            type: integer
+                          profile:
+                            type: integer
+                          type:
+                            type: string
+                          created:
+                            type: string
+              example:
+                detail:
+                  -
+                    name: "BS VPS Standard 1G/300M"
+                    service_id: 9
+                    upload: 300
+                    download: 1000
+                    ont: 2301
+                    voip: 0
+                    profile: 1
+                    type: "bitstream"
+                    created:
+
+          description: 'Informacion del servicio.'
+        '400':
+          description: Petición mal formada.
+        '401':
+          description: Falta información relativa a la Autorización, o esta es inválida.
+        '5XX':
+          description: Error en el servidor.
+      tags:
+      - Servicios
+  /api/orders:
+    get:
+      operationId: getOrders
+      description: 'Obtiene un listado de pedidos de la organización
+      a la que pertenece el usuario que realiza la petición.
+
+
+        Permisos
+
+        -----------------
+
+        - order.view_orders
+
+
+        Devuelve
+
+        -------
+
+        - Json Response'
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    detail: 
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          order_id:
+                            type: string
+                          status:
+                            type: string
+                          service__service_id:
+                            type: integer
+                          fsan:
+                            type: string
+                          wlan_name:
+                            type: string
+                          wlan_pass:
+                            type: string
+                          sip_username1:
+                            type: string
+                          sip_secret1:
+                            type: string
+                          port_forwarding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                ip:
+                                  type: string
+                                port:
+                                  type: string
+                                proto:
+                                  type: string
+                          created_at:
+                            type: string
+                          modified_at:
+                            type: string
+                            
+              example:
+                detail:
+                  -
+                    order_id: "51670000025"
+                    status: "planned"
+                    service__service_id: 9 
+                    fsan:
+                    wlan_name: 
+                    wlan_pass: 
+                    sip_username1: 
+                    sip_secret1: 
+                    port_forwarding: []
+                    created_at: "2021-07-23T16:23:36.265+02:00"
+                    modified_at: "2021-10-08T14:55:40.790+02:00"
+                  -
+                    order_id: "51670000026"
+                    status: "verified"
+                    service__service_id: 72
+                    fsan: "48575443E8C67BA5"
+                    wlan_name: "FiberCli_Custom"
+                    wlan_pass: "customPassword"
+                    sip_username1: "mta-0658"
+                    sip_secret1: "nqiavVU8g1cBc"
+                    port_forwarding:
+                      -
+                        ip: "192.168.1.33"
+                        port: "80-100"
+                        proto: "udp"
+                    created_at: "2021-07-23T18:02:26.879+02:00"
+                    modified_at: "2021-10-08T16:56:12.988+02:00"
+          description: 'Datos del pedido.'
+        '401':
+          description: Falta información relativa a la Autorización, o esta es inválida.
+        '5XX':
+          description: Error en el servidor.
+      tags:
+      - Pedidos
+  /api/orders/{order_id}:
+    get:
+      operationId: getOrderById
+      description: 'Obtiene los datos de un pedido obtenido por su ID de Adamo.
+
+
+        Permisos
+
+        -----------------
+
+        - order.view_orders
+
+
+        Devuelve
+
+        -------
+
+        - Json Response'
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: 'ID del pedido.'
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    detail: 
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          order_id:
+                            type: string
+                          status:
+                            type: string
+                          service__service_id:
+                            type: integer
+                          fsan:
+                            type: string
+                          wlan_name:
+                            type: string
+                          wlan_pass:
+                            type: string
+                          sip_username1:
+                            type: string
+                          sip_secret1:
+                            type: string
+                          port_forwarding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                ip:
+                                  type: string
+                                port:
+                                  type: string
+                                proto:
+                                  type: string
+                          created_at:
+                            type: string
+                          modified_at:
+                            type: string
+                            
+              example:
+                detail:
+                  -
+                    order_id: "51670000026"
+                    status: "verified"
+                    service__service_id: 72
+                    fsan: "48575443E8C67BA5"
+                    wlan_name: "FiberCli_Custom"
+                    wlan_pass: "customPassword"
+                    sip_username1: "mta-0658"
+                    sip_secret1: "nqiavVU8g1cBc"
+                    port_forwarding:
+                      -
+                        ip: "192.168.1.33"
+                        port: "80-100"
+                        proto: "udp"
+                    created_at: "2021-07-23T18:02:26.879+02:00"
+                    modified_at: "2021-10-08T16:56:12.988+02:00"
+          description: 'Datos del pedido.'
+        '401':
+          description: Falta información relativa a la Autorización, o esta es inválida.
+        '5XX':
+          description: Error en el servidor.
+      tags:
+      - Pedidos
+    put:
+      operationId: putOrder
+      description: 'Edita los datos de WLAN, VoIP y Port forwarding en el ACS para
+        el dispositivo
+
+        asociado al pedido.
+
+
+        Permisos
+
+        -----------------
+
+        - order.change_orders
+
+
+        Devuelve
+
+        -------
+
+        - JsonResponse'
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: 'ID del pedido.'
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                # fsan:
+                #   type: string
+                #   description: 'FSAN del dispositivo.'
+                wlan_name:
+                  type: string
+                  description: 'SSID para la wlan.'
+                wlan_pass:
+                  type: string
+                  description: 'Contraseña para wlan.'
+                sip_username1:
+                  type: string
+                  description: 'Usuario para VoIP.'
+                sip_secret1:
+                  type: string
+                  description: 'Contraseña para VoIP.'
+                port_forwarding:
+                  type: string
+                  description: 'Port forwarding. Json convertido a string con las propiedades "ip" (ipv4), "port" (un solo puerto o rango separado por guion. Por ejemplo: 80-100) y "proto" (Enum "tcp", "udp", "tcp/udp")'
+                apply_changes:
+                  type: boolean
+                  description: 'Flag que si se incluye con el valor "true" hace que se apliquen los cambios inmediatamente en el dispositivo.'
+            example:
+              # fsan: "HWTCE8C67BA5"
+              wlan_name: "Custom_SSID"
+              wlan_pass: "cust0mP4$$"
+              sip_username1: "mta-0658"
+              sip_secret1: "nqiavVU8g1cBcs"
+              port_forwarding:
+                -
+                  ip: "192.168.1.45"
+                  port: "80"
+                  proto: "tcp/udp"
+                -
+                  ip: "192.168.1.50"
+                  port: "80-100"
+                  proto: "tcp"
+              apply_changes: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail: 
+                    type: string
+                example:
+                  detail: "Ok"
+          description: 'Mensaje de que la operación se ha realizado sin errores.'
+        '400':
+          description: Petición mal formada.
+        '401':
+          description: Falta información relativa a la Autorización, o esta es inválida.
+        '5XX':
+          description: Error en el servidor.
+      tags:
+      - Pedidos
+    delete:
+      operationId: deleteOrder
+      description: 'Se eliminan presets del ACS, y se ponen los campos
+
+        fsan, wlan_name, wlan_pass, sip_username1, sip_secret1, port_forwarding a null
+
+
+        Permisos
+
+        -----------------
+
+        - order.delete_orders
+
+
+        Devuelve
+
+        -------
+
+        - Json Response'
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: 'ID del pedido.'
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail: 
+                    type: string
+                example:
+                  detail: "Ok"
+          description: 'Mensaje de OK.'
+        '400':
+          description: Petición mal formada.
+        '401':
+          description: Falta información relativa a la Autorización, o esta es inválida.
+        '5XX':
+          description: Error en el servidor.
+      tags:
+      - Pedidos
+  /api/reboot/{order_id}:
+    get:
+      operationId: getReboot
+      description: "Env\xEDa reboot al dispositivo a trav\xE9s del ACS.\n\nPermisos\n\
+        -----------------\n- order.change_orders\n\nDevuelve\n-------\n- Json Response"
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: 'ID del pedido.'
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    detail: 
+                      type: string
+              example:
+                  detail: "Ok"
+          description: 'Se ha enviado reboot al ACS y se aplicará al dispositivo inmediatamente.'
+        '202':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail: 
+                    type: string
+              example:
+                  detail: "Ok"
+          description: 'Se ha enviado reboot al ACS y se aplicará cuando el dispositivo esté disponible.'
+        '400':
+          description: Petición mal formada.
+        '5XX':
+          description: Error en el servidor.
+      tags:
+      - Reboot
+  /api/factory-reset/{order_id}:
+    get:
+      operationId: getFactoryReset
+      description: "Env\xEDa factory reset al dispositivo a trav\xE9s del ACS.\n\n\
+        Permisos\n-----------------\n- order.change_orders\n\nDevuelve\n-------\n\
+        - Json Response"
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: 'ID del pedido.'
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    detail: 
+                      type: string
+              example:
+                  detail: "Ok"
+          description: 'Se ha enviado factory reset al ACS y se aplicará al dispositivo inmediatamente.'
+        '202':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    detail: 
+                      type: string
+              example:
+                  detail: "Ok"
+          description: 'Se ha enviado factory reset al ACS y se aplicará cuando el dispositivo esté disponible.'
+        '400':
+          description: Petición mal formada.
+        '5XX':
+          description: Error en el servidor.
+      tags:
+      - Factory Reset
+  /api/get-fsan/{order_id}:
+    get:
+      operationId: getFsan
+      description: "Obtiene el FSAN de la ONT asociada al pedido. \n\nPermisos\n-----------------\n- order.change_orders\n\n\
+        Returns\n-------\n- Json Response"
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fsan:
+                    type: string
+              example:
+                fsan: "48575443E8C67BA5"
+          description: 'FSAN normalizado para uso interno en el ACS.'
+
+        '400':
+          description: Petición mal formada.
+        '401':
+          description: Falta información relativa a la Autorización, o esta es inválida.
+        '5XX':
+          description: Error en el servidor.
+      tags:
+      - Obtención de FSAN
+  /api/change-fsan/{order_id}:
+    post:
+      operationId: postChangeFsan
+      description: "Cambia el FSAN de la ONT de un pedido.\n\nPermisos\n-----------------\n- order.change_orders\n\n\
+        Devuelve\n-------\n- Json Response"
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fsan:
+                  type: string
+                  pattern: '^([A-Za-z]{4}[A-Fa-f0-9]{8})|([A-Fa-f0-9]{16})$'
+                  description: 'Nuevo FSAN en formato HWTC{8 dígitos hex.}, hwtc{8 dígitos hex.} o 48575443E8C67BA5 (16 dígitos hex.).'
+              required:
+                - fsan
+            example:
+              fsan: "HWTCe8C67ba5"
+           
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fsan:
+                    type: string
+                required:
+                - fsan
+              example:
+                fsan: "48575443E8C67BA5"
+          description: 'FSAN normalizado para uso interno en el ACS.'
+        '400':
+          description: Petición mal formada.
+        '401':
+          description: Falta información relativa a la Autorización, o esta es inválida.
+        '5XX':
+          description: Error en el servidor.
+      tags:
+      - Cambio de FSAN
+  /api/check/{order_id}:
+    get:
+      operationId: getCheckOnt
+      description: "Comprueba el estado de la ONT asociado a un ID de pedido.\n\nPermisos\n-----------------\n- order.view_orders\n\
+        \nDevuelve\n-------\n- Json Response"
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: 'ID del pedido.'
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    detail: 
+                      type: object
+                      properties:
+                        status:
+                          type: string
+              examples:
+                OK:
+                  value:
+                    detail: 
+                      status: "true"
+                Error:
+                  value:
+                    detail: 
+                      status: "false"
+
+          description: ''
+        '400':
+          description: Petición mal formada.
+        '401':
+          description: Falta información relativa a la Autorización, o esta es inválida.
+        '5XX':
+          description: Error en el servidor.
+      tags:
+      - Check de la ONT
+  /api/provision/{order_id}:
+    post:
+      operationId: postProvision
+      description: "Env\xEDa provision al dispositivo a trav\xE9s de Adamo.\n\
+        \nPermisos\n-----------------\n- order.change_orders\n\nDevuelve\n\
+        -------\n- Json Response"
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: 'ID del pedido.'
+        schema:
+          type: integer
+      requestBody:
+        content:
+          # application/x-www-form-urlencoded:
+          #   schema:
+          #     $ref: '#/components/schemas/AuthToken'
+          application/json:
+            schema:
+              type: object
+              properties:
+                fsan:
+                  type: string
+                  pattern: '^([A-Za-z]{4}[A-Fa-f0-9]{8})|([A-Fa-f0-9]{16})$'
+                  description: 'Nuevo FSAN en formato HWTC{8 dígitos hex.}, hwtc{8 dígitos hex.} o 48575443E8C67BA5 (16 dígitos hex.).'
+              required:
+                - fsan
+            example:
+              fsan: "HWTCe8C67ba5"
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    detail: 
+                      type: object
+                      properties:
+                        status:
+                          type: string
+              example:
+                detail: "Ok"
+          description: ''
+        '400':
+          description:  Petición mal formada.
+        '401':
+          description: Falta información relativa a la Autorización, o esta es inválida.
+        '5XX':
+          description: Error en el servidor.
+      tags:
+      - Provisión de la ONT
+components:
+  securitySchemes:
+    # bearerAuth:
+      # type: http
+      # scheme: bearer
+      # bearerFormat: Token
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+#   schemas:
+#     AuthToken:
+#       type: object
+#       properties:
+#         username:
+#           type: string
+#           writeOnly: true
+#         password:
+#           type: string
+#           writeOnly: true
+#         token:
+#           type: string
+#           readOnly: true
+#       required:
+#       - username
+#       - password
